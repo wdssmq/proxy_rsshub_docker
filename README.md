@@ -30,18 +30,33 @@ fi
 运行：
 
 ```bash
+# 调试运行
 XML_DIR=/home/www/xmlRSS
 if [ ! -d $XML_DIR ]; then
   mkdir -p $XML_DIR
 fi
+DEBUG=0
 docker rm --force proxy_rsshub
-docker run --rm --name proxy_rsshub \
-  -v $XML_DIR:/app/xml \
-  wdssmq/proxy_rsshub_docker "run build"
+if [ "$DEBUG" -eq "1" ]; then
+  docker run --rm --name proxy_rsshub \
+    -v $XML_DIR:/app/xml \
+    wdssmq/proxy_rsshub_docker "run build"
+else
+  docker run -d --name proxy_rsshub \
+    -v $XML_DIR:/app/xml \
+    wdssmq/proxy_rsshub_docker "run build"
+fi
 # exit
 
 # 查看日志
 docker logs proxy_rsshub
+
+# 外部触发
+rm -rf $XML_DIR/*.*
+docker exec proxy_rsshub "/entrypoint.d/entrypoint.sh" "run build"
+
+# 用于设置定时
+# * 2 * * * docker exec proxy_rsshub "/entrypoint.d/entrypoint.sh" "run build"
 
 # 进入容器
 docker exec -it proxy_rsshub /bin/bash
@@ -50,6 +65,11 @@ docker exec -it proxy_rsshub /bin/bash
 XML_DIR=/home/www/xmlRSS
 # docker cp proxy_rsshub:/app/README.md $XML_DIR
 # docker cp proxy_rsshub:/app/php $XML_DIR
+docker cp proxy_rsshub/main.py proxy_rsshub:/app
+
+# 更新 config.json 
+cd /root/Git/proxy_rsshub_docker
+docker cp config.json proxy_rsshub:/app/config.json
 
 ```
 
