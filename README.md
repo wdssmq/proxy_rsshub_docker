@@ -33,11 +33,11 @@ if [ ! -d $XML_DIR ]; then
   mkdir -p $XML_DIR
 fi
 docker rm --force proxy_rsshub
-docker run --rm --name proxy_rsshub \
+docker run d --name proxy_rsshub \
   -v $XML_DIR:/app/xml \
+  --restart=always \
   wdssmq/proxy_rsshub_docker "run build"
 # exit
-  # --restart=always \
 
 # 查看日志
 docker logs proxy_rsshub
