@@ -15,11 +15,13 @@ if [ ! -d proxy_rsshub ]; then
 fi
 
 # 复制 config.json，之后可自定义
+cd /root/Git/proxy_rsshub_docker
 if [ ! -e config.json ]; then
   cp config.def.json config.json
 fi
 
 # Build
+cd /root/Git/proxy_rsshub_docker
 if [ -d proxy_rsshub ] && [ -e config.json ]; then
   docker build -t wdssmq/proxy_rsshub_docker .
 fi
@@ -33,9 +35,8 @@ if [ ! -d $XML_DIR ]; then
   mkdir -p $XML_DIR
 fi
 docker rm --force proxy_rsshub
-docker run d --name proxy_rsshub \
+docker run --rm --name proxy_rsshub \
   -v $XML_DIR:/app/xml \
-  --restart=always \
   wdssmq/proxy_rsshub_docker "run build"
 # exit
 
@@ -47,10 +48,12 @@ docker exec -it proxy_rsshub /bin/bash
 
 # 「调试」复制文件
 XML_DIR=/home/www/xmlRSS
-docker cp proxy_rsshub:/app/README.md $XML_DIR
-docker cp proxy_rsshub:/app/php $XML_DIR
+# docker cp proxy_rsshub:/app/README.md $XML_DIR
+# docker cp proxy_rsshub:/app/php $XML_DIR
 
 ```
+
+## 映射为 web 服务 
 
 ```shell
 PORT_nginx=1201

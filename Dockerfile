@@ -1,5 +1,4 @@
-ARG PYTHON_IMAGE_VERSION=3
-FROM python:$PYTHON_IMAGE_VERSION
+FROM python:3.9.7-alpine
 
 RUN pip install --upgrade pip \
  && pip install pipenv \
