@@ -51,12 +51,19 @@ fi
 # 查看日志
 docker logs proxy_rsshub
 
+# 更新 config.json 
+cd /root/Git/proxy_rsshub_docker
+docker cp config.json proxy_rsshub:/app/config.json
+
 # 外部触发
+XML_DIR=/home/www/xmlRSS
 rm -rf $XML_DIR/*.*
-docker exec proxy_rsshub "/entrypoint.d/entrypoint.sh" "run build"
+docker start proxy_rsshub
+# ↑ 可以直接触发
+# docker exec proxy_rsshub "/entrypoint.d/entrypoint.sh" "run build"
 
 # 用于设置定时
-# * 2 * * * docker exec proxy_rsshub "/entrypoint.d/entrypoint.sh" "run build"
+# * 2 * * * docker start proxy_rsshub
 
 # 进入容器
 docker exec -it proxy_rsshub /bin/bash
@@ -66,10 +73,6 @@ XML_DIR=/home/www/xmlRSS
 # docker cp proxy_rsshub:/app/README.md $XML_DIR
 # docker cp proxy_rsshub:/app/php $XML_DIR
 docker cp proxy_rsshub/main.py proxy_rsshub:/app
-
-# 更新 config.json 
-cd /root/Git/proxy_rsshub_docker
-docker cp config.json proxy_rsshub:/app/config.json
 
 ```
 
