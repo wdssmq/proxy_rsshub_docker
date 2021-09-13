@@ -66,7 +66,7 @@ docker start proxy_rsshub
 # docker exec proxy_rsshub "/entrypoint.d/entrypoint.sh" "run build"
 
 # 用于设置定时
-# * 2 * * * docker start proxy_rsshub
+# 0 2 * * * docker start proxy_rsshub
 
 # 进入容器
 docker exec -it proxy_rsshub /bin/sh
