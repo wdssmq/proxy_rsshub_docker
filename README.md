@@ -41,12 +41,12 @@ docker rm --force proxy_rsshub
 if [ "$DEBUG" -eq "1" ]; then
   docker run --rm --name proxy_rsshub \
     -v $CONFIG_YML:/app/config.yml \
-    -v $XML_DIR:/app/xml \
+    -v $XML_DIR:/web \
     wdssmq/proxy_rsshub_docker "run build"
 else
   docker run -d --name proxy_rsshub \
     -v $CONFIG_YML:/app/config.yml \
-    -v $XML_DIR:/app/xml \
+    -v $XML_DIR:/web \
     wdssmq/proxy_rsshub_docker "run build"
 fi
 # exit
@@ -69,7 +69,7 @@ docker start proxy_rsshub
 # * 2 * * * docker start proxy_rsshub
 
 # 进入容器
-docker exec -it proxy_rsshub /bin/bash
+docker exec -it proxy_rsshub /bin/sh
 
 # 「调试」复制文件
 XML_DIR=/home/www/xmlRSS

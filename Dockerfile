@@ -7,14 +7,14 @@ RUN pip install --upgrade pip \
 RUN mkdir /app
 RUN mkdir /app/xml
 RUN mkdir /entrypoint.d
+RUN mkdir /web
 
 WORKDIR /app
 
 COPY proxy_rsshub/Pipfile /app
 RUN pipenv install -d
 
-COPY proxy_rsshub/main.py /app
-COPY proxy_rsshub/function_base.py /app
+COPY proxy_rsshub/*.py /app/
 COPY proxy_rsshub/README.md /app
 
 COPY php /app
