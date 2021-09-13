@@ -19,7 +19,7 @@ COPY proxy_rsshub/README.md /app
 
 COPY php /app
 
-COPY config.json /app
+COPY config.yml /app
 COPY entrypoint.sh /entrypoint.d
 RUN chmod +x /entrypoint.d/entrypoint.sh
 ENTRYPOINT ["/entrypoint.d/entrypoint.sh"]

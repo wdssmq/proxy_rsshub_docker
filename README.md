@@ -14,15 +14,15 @@ if [ ! -d proxy_rsshub ]; then
   git clone git@github.com:wdssmq/proxy_rsshub.git
 fi
 
-# 复制 config.json，之后可自定义
+# 复制 config.yml，之后可自定义
 cd /root/Git/proxy_rsshub_docker
-if [ ! -e config.json ]; then
-  cp config.def.json config.json
+if [ ! -e config.yml ]; then
+  cp config.def.yml config.yml
 fi
 
 # Build
 cd /root/Git/proxy_rsshub_docker
-if [ -d proxy_rsshub ] && [ -e config.json ]; then
+if [ -d proxy_rsshub ] && [ -e config.yml ]; then
   docker build -t wdssmq/proxy_rsshub_docker .
 fi
 ```
@@ -31,6 +31,7 @@ fi
 
 ```bash
 # 调试运行
+CONFIG_YML=/root/Git/proxy_rsshub_docker/config.yml
 XML_DIR=/home/www/xmlRSS
 if [ ! -d $XML_DIR ]; then
   mkdir -p $XML_DIR
@@ -39,10 +40,12 @@ DEBUG=0
 docker rm --force proxy_rsshub
 if [ "$DEBUG" -eq "1" ]; then
   docker run --rm --name proxy_rsshub \
+    -v $CONFIG_YML:/app/config.yml \
     -v $XML_DIR:/app/xml \
     wdssmq/proxy_rsshub_docker "run build"
 else
   docker run -d --name proxy_rsshub \
+    -v $CONFIG_YML:/app/config.yml \
     -v $XML_DIR:/app/xml \
     wdssmq/proxy_rsshub_docker "run build"
 fi
@@ -51,9 +54,9 @@ fi
 # 查看日志
 docker logs proxy_rsshub
 
-# 更新 config.json 
+# 更新 config.yml 
 cd /root/Git/proxy_rsshub_docker
-docker cp config.json proxy_rsshub:/app/config.json
+docker cp config.yml proxy_rsshub:/app/config.yml
 
 # 外部触发
 XML_DIR=/home/www/xmlRSS
